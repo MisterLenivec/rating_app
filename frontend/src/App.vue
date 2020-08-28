@@ -2,17 +2,16 @@
   <div id="app">
 
     <form @submit.prevent="submitForm">
-      <div class="form-group row">
-        <input type="text" class="form-control col-3 mx-2" placeholder="Name"
-               v-model="course.name">
-        <input type="text" class="form-control col-3 mx-2" placeholder="Site URL"
-               v-model="course.url">
-        <input type="text" class="form-control col-3 mx-2" placeholder="Rating"
-               v-model="course.rating">
+      <div class="form-group row inputWrapper">
+        <input type="text" class="form-control col-3 mx-2 inputField"
+               placeholder="Name" v-model="course.name">
+        <input type="text" class="form-control col-3 mx-2 inputField"
+               placeholder="Site URL" v-model="course.url">
+        <input type="text" class="form-control col-3 mx-2 inputField"
+               placeholder="Rating" v-model="course.rating">
         <button class="btn btn-success">Submit</button>
       </div>
     </form>
-
     <table class="table">
       <thead>
         <th>Name</th>
@@ -37,7 +36,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'App',
   data() {
@@ -64,11 +62,11 @@ export default {
       this.courses = await response.json();
     },
 
-    async createCourse() {
+    async CRUDFunction(method, courseId) {
       await this.getCourses();
 
-      await fetch('http://127.0.0.1:8000/api/courses/', {
-        method: 'post',
+      await fetch(`http://127.0.0.1:8000/api/courses/${courseId ? courseId + '/' : ''}`, {
+        method: method,
         headers: {
           'Content-Type': 'application/json'
         },
@@ -77,35 +75,18 @@ export default {
 
       await this.getCourses();
       this.course = {};
+    },
+
+    async createCourse() {
+      await this.CRUDFunction('post');
     },
 
     async editCourse() {
-      await this.getCourses();
-
-      await fetch(`http://127.0.0.1:8000/api/courses/${this.course.id}/`, {
-        method: 'put',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(this.course)
-      });
-
-      await this.getCourses();
-      this.course = {};
+      await this.CRUDFunction('put', this.course.id);
     },
 
     async deleteCourse(course) {
-      await this.getCourses();
-
-      await fetch(`http://127.0.0.1:8000/api/courses/${course.id}/`, {
-        method: 'delete',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(this.course)
-      });
-
-      await this.getCourses();
+      await this.CRUDFunction('delete', course.id);
     }
   }
 }
@@ -120,4 +101,34 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+@media all and (max-width: 500px) {
+  #app {
+    margin: 0;
+  }
+}
+</style>
+
+<style scoped>
+  .inputWrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media all and (max-width: 1000px) {
+    .inputWrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      max-width: 100%;
+    }
+    .inputField {
+      max-width: 100%;
+    }
+    .table {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
 </style>
