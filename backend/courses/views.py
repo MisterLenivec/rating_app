@@ -5,5 +5,6 @@ from .serializer import CourseSerializer
 
 
 class CoursesViewSet(ModelViewSet):
+    """Вывод списка курсов"""
     queryset = Courses.objects.all()
     serializer_class = CourseSerializer

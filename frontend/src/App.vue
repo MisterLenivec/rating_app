@@ -7,16 +7,27 @@
                placeholder="Name" v-model="course.name">
         <input type="text" class="form-control col-3 mx-2 inputField"
                placeholder="Site URL" v-model="course.url">
-        <input type="text" class="form-control col-3 mx-2 inputField"
-               placeholder="Rating" v-model="course.rating">
+<!--        <input type="text" class="form-control col-3 mx-2 inputField"-->
+<!--               placeholder="Rating from 0 to 5" v-model="course.rating">-->
+        <select class="form-control col-3 mx-2 inputField" v-model="course.rating">
+          <option disabled value="">Rating</option>
+          <option>0</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
         <button class="btn btn-success">Submit</button>
       </div>
     </form>
     <table class="table">
       <thead>
-        <th>Name</th>
-        <th>Site</th>
-        <th>Rating</th>
+        <tr>
+          <th>Name</th>
+          <th>Site</th>
+          <th>Rating</th>
+        </tr>
       </thead>
       <tbody>
         <tr v-for="course in courses" :key="course.id"
@@ -41,7 +52,7 @@ export default {
   data() {
     return {
       course: {},
-      courses: []
+      courses: [],
     }
   },
   async created() {
@@ -124,6 +135,7 @@ export default {
     }
     .inputField {
       max-width: 100%;
+      margin: 1px;
     }
     .table {
       display: flex;
